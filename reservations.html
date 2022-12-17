@@ -13,9 +13,8 @@
     <a href="members.html">Members</a>
     <a href="reservations.html">Reservations</a>
 </div>
-
+<br>
 <h2>Reservations Page</h2>
-
 <br>
 <br>
 <div class="addForm">
@@ -24,16 +23,10 @@
         <h2>Add new Reservation</h2><br>
         <label for="reservationDate">Reservation Date: (yyyy-mm-dd)</label>
         <input type="text" id="reservationDate" name="reservationDate"><br><br>
-        <label for="rentalDate">Rental Date:</label>
-        <input type="text" id="rentalDate" name="rentalDate"><br><br>
-        <label for="member">Choose a Member:</label>
-        <select id="member">
-            <option value="1" selected="selected">test1</option>
-            <option value="2">test2</option>
-            <option value="3">test3</option>
-        </select>
-        <input type="submit" id="add-reservation-btn" value="Add Reservation">
-    </form>
+        <label for="member-dropdown">Choose a Member:</label>
+        <select id="member-dropdown"></select><br><br>
+        <input type="submit" id="add-reservation-btn" value="Add Reservation"><br><br>
+    </form><br><br>
 </div>
 <br>
 <h2>Members</h2>
@@ -44,7 +37,7 @@
         <th>Reservation date</th>
         <th>Rental Date</th>
         <th>Member id</th>
-        <th>Member Firstname</th>
+        <th>Member Name</th>
     </tr>
 </table>
 

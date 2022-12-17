@@ -93,13 +93,13 @@ editMemberButton.addEventListener('click', () => {
 })
 
 async function fetchEdit() {
-    const response = await fetch(url + '/' +idToEdit.value).then(response => response.json());
+    const response = await fetch(url + '/' +idToEdit.value).then(response => response.json())
     editFirstName.value = response.firstName
     editLastName.value = response.lastName
     editStreet.value = response.street
 }
 
-async function editMember() {
+function editMember() {
 
     fetch(url + '/' + idToEdit.value, {
         method: 'PUT',

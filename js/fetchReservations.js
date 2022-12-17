@@ -1,23 +1,13 @@
 const table = document.querySelector('.table')
 
-
-const firstName = document.querySelector('#firstName')
-const lastName = document.querySelector('#lastName')
-const street = document.querySelector('#street')
-const addMemberButton = document.querySelector('#add-member-btn')
-
-
-const editForm = document.querySelector('#editForm')
-const idToEdit = document.querySelector('#id-to-edit')
-const editMemberButton = document.querySelector('#edit-member-btn')
-const editFirstName = document.querySelector('#editFirstName')
-const editLastName = document.querySelector('#editLastName')
-const editStreet = document.querySelector('#editStreet')
-const submitEdit = document.querySelector('#submit-edited-member-btn')
+const memberDropDown = document.querySelector('#member-dropdown')
+const reservationDate = document.querySelector('#reservationDate')
+const addReservationButton = document.querySelector('#add-reservation-btn')
 
 const url = 'http://localhost:8080/reservations'
+const urlMember = 'http://localhost:8080/members'
 
-
+loadDropdown()
 getReservation()
 
 function getReservation() {
@@ -36,9 +26,9 @@ function getReservation() {
                 const tdRentalDate = document.createElement('td')
                 tdRentalDate.innerHTML = reservation.rentalDate
                 const tdMemberId = document.createElement('td')
-                tdMemberId.innerHTML =  reservation.member.id
-                const tdMemberFirstName = document.createElement('td')
-                tdMemberFirstName.innerHTML = reservation.member.firstName
+                tdMemberId.innerHTML = reservation.member.id
+                const tdMemberName = document.createElement('td')
+                tdMemberName.innerHTML = reservation.member.firstName + ' ' + reservation.member.lastName
                 const tdDeleteButton = document.createElement('button')
                 tdDeleteButton.innerHTML = 'Delete'
 
@@ -52,13 +42,52 @@ function getReservation() {
                     })
                         .then(data => {
                             alert('Reservation was deleted')
-                            window.location.href = 'members.html'
+                            window.location.href = 'reservations.html'
                         })
                         .catch(err => console.log(err))
                 })
 
-                tableRow.append(tdId, tdReservationDate,tdRentalDate,tdMemberId,tdMemberFirstName,tdDeleteButton)
+                tableRow.append(tdId, tdReservationDate, tdRentalDate, tdMemberId, tdMemberName, tdDeleteButton)
                 table.appendChild(tableRow)
             })
         })
 }
+
+function loadDropdown() {
+    fetch(urlMember)
+        .then((Response) => Response.json())
+        .then((members) => {
+
+            members.reverse().forEach((member) => {
+
+                const option = document.createElement('option');
+                option.value = member.id
+                option.text = 'Id: ' + member.id + ', ' + member.firstName + ' ' + member.lastName;
+                memberDropDown.add(option, 0);
+
+            })
+        })
+}
+
+addReservationButton.addEventListener('click', async () => {
+
+    await fetch(urlMember + '/' +memberDropDown.value).then(response => response.json())
+
+    fetch(url, {
+
+        method: "POST",
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+        },
+
+        body: JSON.stringify({
+            reservationDate: reservationDate.value,
+            member: {
+                id: memberDropDown.value,
+            }
+        }),
+    })
+        .then((response) => response.json())
+
+})
