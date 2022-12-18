@@ -44,12 +44,14 @@
     </tr>
 </table>
 
+<div style="border: solid 1px black"><br>
+<h2>Edit Members</h2><br>
 <label for="id-to-edit">Member Id to edit:</label>
 <input id="id-to-edit">
 <button id="edit-member-btn">Edit members</button>
 
 <div class="notVisible" id="editForm">
-    <form style="border: solid 1px black">
+    <form>
         <br>
         <h2>Edit new Member</h2><br>
         <label for="editFirstName">First name:</label>
@@ -60,6 +62,7 @@
         <input type="text" id="editStreet" name="street"><br><br>
         <input type="submit" id="submit-edited-member-btn" value="Submit Edited Member"><br><br>
     </form><br><br>
+</div>
 </div>
 
 <script src="js/fetchMembers.js"></script>

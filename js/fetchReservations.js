@@ -1,17 +1,20 @@
 const table = document.querySelector('.table')
 
 const memberDropDown = document.querySelector('#member-dropdown')
+const carDropDown = document.querySelector('#car-dropdown')
 const reservationDate = document.querySelector('#reservationDate')
 const addReservationButton = document.querySelector('#add-reservation-btn')
 
-const url = 'http://localhost:8080/reservations'
+const urlReservation = 'http://localhost:8080/reservations'
 const urlMember = 'http://localhost:8080/members'
+const urlCar = 'http://localhost:8080/cars'
 
-loadDropdown()
+loadMemberDropdown()
+loadCarDropdown()
 getReservation()
 
 function getReservation() {
-    fetch(url)
+    fetch(urlReservation)
         .then((Response) => Response.json())
         .then((reservation) => {
 
@@ -29,12 +32,16 @@ function getReservation() {
                 tdMemberId.innerHTML = reservation.member.id
                 const tdMemberName = document.createElement('td')
                 tdMemberName.innerHTML = reservation.member.firstName + ' ' + reservation.member.lastName
+                const tdCarId = document.createElement('td')
+                tdCarId.innerHTML = reservation.car.id
+                const tdCarBrandModel = document.createElement('td')
+                tdCarBrandModel.innerHTML = reservation.car.brand + ' ' + reservation.car.model
                 const tdDeleteButton = document.createElement('button')
                 tdDeleteButton.innerHTML = 'Delete'
 
                 tdDeleteButton.addEventListener('click', () => {
 
-                    fetch(url + '/' + reservation.id, {
+                    fetch(urlReservation + '/' + reservation.id, {
                         method: 'DELETE',
                         headers: {
                             'Content-Type': 'application/json'
@@ -47,18 +54,19 @@ function getReservation() {
                         .catch(err => console.log(err))
                 })
 
-                tableRow.append(tdId, tdReservationDate, tdRentalDate, tdMemberId, tdMemberName, tdDeleteButton)
+                tableRow.append(tdId, tdReservationDate, tdRentalDate, tdMemberId, tdMemberName, tdCarId, tdCarBrandModel, tdDeleteButton)
                 table.appendChild(tableRow)
             })
         })
 }
 
-function loadDropdown() {
+
+function loadMemberDropdown() {
     fetch(urlMember)
         .then((Response) => Response.json())
         .then((members) => {
 
-            members.reverse().forEach((member) => {
+            members.forEach((member) => {
 
                 const option = document.createElement('option');
                 option.value = member.id
@@ -69,11 +77,52 @@ function loadDropdown() {
         })
 }
 
+function loadCarDropdown() {
+    fetch(urlCar)
+        .then((Response) => Response.json())
+        .then((cars) => {
+
+            cars.forEach((car) => {
+                const option = document.createElement('option');
+
+                option.value = car.id
+                option.text = 'Id: ' + car.id + ', ' + car.brand + ' ' + car.model;
+                carDropDown.add(option, 0);
+            })
+        })
+}
+
+
 addReservationButton.addEventListener('click', async () => {
 
-    await fetch(urlMember + '/' +memberDropDown.value).then(response => response.json())
+    let available = true
 
-    fetch(url, {
+    //Gets reservations with same car
+    await fetch('http://localhost:8080/carReservations/' + carDropDown.value)
+
+
+        .then((Response) => Response.json())
+        .then((reservations) => {
+            reservations.forEach((reservation) => {
+                if (reservation.reservationDate === reservationDate.value) {
+                    available = false
+                }
+            })
+        })
+    if (available) {
+        alert('Car is available!')
+        await addReservation()
+    } else {
+        alert('Car is not available for the date!')
+        alert('Reservation was not created!')
+
+    }
+})
+
+function addReservation() {
+
+    console.log('IN add')
+    fetch(urlReservation, {
 
         method: "POST",
         headers: {
@@ -85,9 +134,12 @@ addReservationButton.addEventListener('click', async () => {
             reservationDate: reservationDate.value,
             member: {
                 id: memberDropDown.value,
+            },
+            car: {
+                id: carDropDown.value,
             }
         }),
     })
         .then((response) => response.json())
-
-})
+    alert('Reservation was added!')
+}
