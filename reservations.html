@@ -4,15 +4,16 @@
     <meta charset="UTF-8">
     <title>Reservations</title>
     <link rel="stylesheet" href="css/member.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
-          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/global.css">
 </head>
 <body>
-<div class="nav-bar">
-    <a href="index.html">Home</a>
-    <a href="members.html">Members</a>
-    <a href="reservations.html">Reservations</a>
-</div>
+<nav>
+    <ul>
+        <li> <a href="index.html">Home</a></li>
+        <li><a href="members.html">Members</a></li>
+        <li><a href="reservations.html">Reservations</a></li>
+    </ul>
+</nav>
 <br>
 <h2>Reservations Page</h2>
 <br>
@@ -42,28 +43,10 @@
         <th>Member Name</th>
         <th>Car id</th>
         <th>Car</th>
+        <th>Delete</th>
     </tr>
 </table>
 
-<h2>Edit Reservations</h2>
-
-<label for="id-to-edit">Member Id to edit:</label>
-<input id="id-to-edit">
-<button id="edit-member-btn">Edit members</button>
-
-<div class="notVisible" id="editForm">
-    <form style="border: solid 1px black">
-        <br>
-        <h2>Edit new Reservation</h2><br>
-        <label for="editFirstName">First name:</label>
-        <input type="text" id="editFirstName" name="fname"><br><br>
-        <label for="editLastName">Last name:</label>
-        <input type="text" id="editLastName" name="lname"><br><br>
-        <label for="editStreet">Street:</label>
-        <input type="text" id="editStreet" name="street"><br><br>
-        <input type="submit" id="submit-edited-member-btn" value="Submit Edited Member">
-    </form>
-</div>
 
 <script src="js/fetchReservations.js"></script>
 </body>

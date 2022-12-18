@@ -16,10 +16,10 @@ const submitEdit = document.querySelector('#submit-edited-member-btn')
 const url = 'http://localhost:8080/members'
 
 
-await getMembers()
+getMembers()
 
 async function getMembers() {
-   await fetch(url)
+    await fetch(url)
         .then((Response) => Response.json())
         .then((members) => {
 
@@ -35,12 +35,13 @@ async function getMembers() {
                 tdLastName.innerHTML = member.lastName
                 const tdStreet = document.createElement('td')
                 tdStreet.innerHTML = member.street
-                const tdDeleteButton = document.createElement('button')
-                tdDeleteButton.innerHTML = 'Delete'
+                const  tdDeleteButton = document.createElement('td')
+                const deleteButton = document.createElement('button')
+                deleteButton.innerHTML = 'Delete'
 
-                tdDeleteButton.addEventListener('click', () => {
+                tdDeleteButton.addEventListener('click', async () => {
 
-                    fetch(url + '/' + member.id, {
+                    await fetch(url + '/' + member.id, {
                         method: 'DELETE',
                         headers: {
                             'Content-Type': 'application/json'
@@ -53,6 +54,7 @@ async function getMembers() {
                         .catch(err => console.log(err))
                 })
 
+                tdDeleteButton.appendChild(deleteButton)
                 tableRow.append(tdId, tdFirstName, tdLastName, tdStreet, tdDeleteButton,)
                 table.appendChild(tableRow)
             })
@@ -60,9 +62,9 @@ async function getMembers() {
 }
 
 
-addMemberButton.addEventListener('click', () => {
+addMemberButton.addEventListener('click', async () => {
 
-        fetch(url, {
+        await fetch(url, {
 
             method: "POST",
             headers: {
@@ -78,20 +80,20 @@ addMemberButton.addEventListener('click', () => {
             .then((response) => response.json())
 
         alert("New member was added!")
-
+        window.location.href = 'members.html'
     }
 )
 
-editMemberButton.addEventListener('click', () => {
+editMemberButton.addEventListener('click', async () => {
     editForm.className = 'visible'
-    fetchEdit()
+    await fetchEdit()
 
-    submitEdit.addEventListener('click',editMember)
+    submitEdit.addEventListener('click', editMember)
 
 })
 
 async function fetchEdit() {
-    const response = await fetch(url + '/' +idToEdit.value).then(response => response.json())
+    const response = await fetch(url + '/' + idToEdit.value).then(response => response.json())
     editFirstName.value = response.firstName
     editLastName.value = response.lastName
     editStreet.value = response.street
@@ -99,7 +101,7 @@ async function fetchEdit() {
 
 async function editMember() {
 
-   await fetch(url + '/' + idToEdit.value, {
+    await fetch(url + '/' + idToEdit.value, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json'
@@ -113,4 +115,5 @@ async function editMember() {
     })
         .then(response => response.json())
         .catch(err => console.log(err))
+    window.location.href = 'members.html'
 }

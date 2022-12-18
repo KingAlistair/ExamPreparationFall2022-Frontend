@@ -13,8 +13,8 @@ loadMemberDropdown()
 loadCarDropdown()
 getReservation()
 
-function getReservation() {
-    fetch(urlReservation)
+async function getReservation() {
+    await fetch(urlReservation)
         .then((Response) => Response.json())
         .then((reservation) => {
 
@@ -36,12 +36,13 @@ function getReservation() {
                 tdCarId.innerHTML = reservation.car.id
                 const tdCarBrandModel = document.createElement('td')
                 tdCarBrandModel.innerHTML = reservation.car.brand + ' ' + reservation.car.model
-                const tdDeleteButton = document.createElement('button')
-                tdDeleteButton.innerHTML = 'Delete'
+                const  tdDeleteButton = document.createElement('td')
+                const deleteButton = document.createElement('button')
+                deleteButton.innerHTML = 'Delete'
 
-                tdDeleteButton.addEventListener('click', () => {
+                tdDeleteButton.addEventListener('click', async () => {
 
-                    fetch(urlReservation + '/' + reservation.id, {
+                    await fetch(urlReservation + '/' + reservation.id, {
                         method: 'DELETE',
                         headers: {
                             'Content-Type': 'application/json'
@@ -54,6 +55,7 @@ function getReservation() {
                         .catch(err => console.log(err))
                 })
 
+                tdDeleteButton.appendChild(deleteButton)
                 tableRow.append(tdId, tdReservationDate, tdRentalDate, tdMemberId, tdMemberName, tdCarId, tdCarBrandModel, tdDeleteButton)
                 table.appendChild(tableRow)
             })
@@ -61,7 +63,7 @@ function getReservation() {
 }
 
 
-function loadMemberDropdown() {
+async function loadMemberDropdown() {
     fetch(urlMember)
         .then((Response) => Response.json())
         .then((members) => {
@@ -77,8 +79,8 @@ function loadMemberDropdown() {
         })
 }
 
-function loadCarDropdown() {
-    fetch(urlCar)
+async function loadCarDropdown() {
+    await fetch(urlCar)
         .then((Response) => Response.json())
         .then((cars) => {
 
@@ -100,7 +102,6 @@ addReservationButton.addEventListener('click', async () => {
         .then((Response) => Response.json())
         .then((available) => {
             if (available) {
-                alert('Car is available!')
                 addReservation()
             } else {
                 alert('Car is not available for the date!')
