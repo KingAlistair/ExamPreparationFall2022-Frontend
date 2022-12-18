@@ -95,34 +95,23 @@ function loadCarDropdown() {
 
 addReservationButton.addEventListener('click', async () => {
 
-    let available = true
-
     //Gets reservations with same car
-    await fetch('http://localhost:8080/carReservations/' + carDropDown.value)
-
-
+    await fetch('http://localhost:8080/carReservations/' + carDropDown.value + '/' + reservationDate.value)
         .then((Response) => Response.json())
-        .then((reservations) => {
-            reservations.forEach((reservation) => {
-                if (reservation.reservationDate === reservationDate.value) {
-                    available = false
-                }
-            })
+        .then((available) => {
+            if (available) {
+                alert('Car is available!')
+                addReservation()
+            } else {
+                alert('Car is not available for the date!')
+                window.location.href = 'reservations.html'
+            }
         })
-    if (available) {
-        alert('Car is available!')
-        await addReservation()
-    } else {
-        alert('Car is not available for the date!')
-        alert('Reservation was not created!')
-
-    }
 })
 
-function addReservation() {
+async function addReservation() {
 
-    console.log('IN add')
-    fetch(urlReservation, {
+   await fetch(urlReservation, {
 
         method: "POST",
         headers: {
@@ -142,4 +131,5 @@ function addReservation() {
     })
         .then((response) => response.json())
     alert('Reservation was added!')
+    window.location.href = 'reservations.html'
 }

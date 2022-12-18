@@ -1,11 +1,9 @@
 const table = document.querySelector('.table')
 
-
 const firstName = document.querySelector('#firstName')
 const lastName = document.querySelector('#lastName')
 const street = document.querySelector('#street')
 const addMemberButton = document.querySelector('#add-member-btn')
-
 
 const editForm = document.querySelector('#editForm')
 const idToEdit = document.querySelector('#id-to-edit')
@@ -18,10 +16,10 @@ const submitEdit = document.querySelector('#submit-edited-member-btn')
 const url = 'http://localhost:8080/members'
 
 
-getMembers()
+await getMembers()
 
-function getMembers() {
-    fetch(url)
+async function getMembers() {
+   await fetch(url)
         .then((Response) => Response.json())
         .then((members) => {
 
@@ -99,9 +97,9 @@ async function fetchEdit() {
     editStreet.value = response.street
 }
 
-function editMember() {
+async function editMember() {
 
-    fetch(url + '/' + idToEdit.value, {
+   await fetch(url + '/' + idToEdit.value, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json'
